@@ -1,72 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- 
-      This is an HTML comment
-      You can write text in a comment and the content won't be visible in the page
-    -->
+<html>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="https://glitch.com/favicon.ico" />
+<head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #FFF;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
 
-    <!--
-      This is the page head - it contains info the browser uses
-      Like the title, which appears on the browser tab but not inside the page
-      Further down you'll see the content that displays in the page
-    -->
-    <title>Hello World!</title>
+        .button:hover {
+            background-color: yellow;
+        }
 
-    <!-- The website stylesheet -->
-    <link rel="stylesheet" href="/style.css" />
+        #question {
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: block; /* Changed from inline-block to block */
+            max-width: 80%; /* Adjusted max-width value */
+            margin: 0 auto; /* Center-align the question */
+            text-align: center;
+        }
 
-    <!-- The website JavaScript file -->
-    <script src="/script.js" defer></script>
-  </head>
-  <body>
-    <!--
-      The body includes the content you see in the page
-      Each element is defined using tags, like this <div></div>
-      The attributes like class="wrapper" let us style elements in the CSS
-    -->
-    <div class="wrapper">
-      <div class="content" role="main">
-        <h1 class="title">Hello World!</h1>
-        <img
-          src="https://cdn.glitch.com/a9975ea6-8949-4bab-addb-8a95021dc2da%2Fillustration.svg?v=1618177344016"
-          class="illustration"
-          alt="Editor illustration"
-          title="Click the image!"
-        />
-        <div class="instructions">
-          <h2>Using this project</h2>
-          <p>
-            This is the Glitch <strong>Hello Website</strong> project. You can
-            use it to build your own site. Check out the code in the editor and open
-            the <span class="fileopener" data-file="TODO.md" data-line="0"
-              >TODO</span> for next steps!
-          </p>
-          <!--  🚧 TODO: ADD BUTTON HERE -->
+        /* Added style to the body for better mobile view */
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+    </style>
+</head>
 
-          <!-- Once you've added the button from TODO.md, click it in the page -->
-          <!-- Check out the function in script.js to see how it works -->
-        </div>
-      </div>
+<body onload="adjustQuestionWidth()">
+    <a-scene embedded arjs="sourceType: webcam;">
+        <!-- Camera with marker tracking -->
+        <a-marker-camera preset="hiro">
+            <!-- Floating Cube -->
+            <a-box id="floatingCube" position="0 0 0" color="#FF0000" depth="0.5" height="0.5" width="0.5"></a-box>
+        </a-marker-camera>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <div style="position: absolute; bottom: 10%; width: 100%; text-align: center;">
+        <div id="question">The Eiffel Tower is located in London.</div>
+        <br>
+        <div class="button" id="trueButton">True</div>
+        <div class="button" id="falseButton">False</div>
     </div>
-    <!-- The footer holds our remix button — you can keep or delete it ✂ -->
-    <footer class="footer">
-      <div class="links"></div>
-      <a
-        class="btn--remix"
-        target="_top"
-        href="https://glitch.com/edit/#!/remix/glitch-hello-website"
-      >
-        <img
-          src="https://cdn.glitch.com/605e2a51-d45f-4d87-a285-9410ad350515%2FLogo_Color.svg?v=1618199565140"
-          alt=""
-        />
-        Remix on Glitch
-      </a>
-    </footer>
-  </body>
+
+    <script>
+        function adjustQuestionWidth() {
+            const questionElement = document.getElementById('question');
+            questionElement.style.maxWidth = window.innerWidth * 0.8 + 'px'; // Adjusted width calculation
+        }
+
+        window.addEventListener('resize', adjustQuestionWidth);
+
+        let questions = [
+            {
+                text: 'The Eiffel Tower is located in London.',
+                answer: false
+            },
+            {
+                text: 'The capital of France is Paris.',
+                answer: true
+            },
+            {
+                text: 'Bananas are blue.',
+                answer: false
+            },
+            {
+                text: 'Cats are mammals.',
+                answer: true
+            },
+            {
+                text: 'The sun is a planet.',
+                answer: false
+            }
+        ];
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        const cube = document.getElementById('floatingCube');
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                document.getElementById('question').innerText = questions[currentQuestionIndex].text;
+            } else {
+                if (correctAnswers === questions.length) {
+                    cube.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 5000');
+                }
+                alert('Quiz completed!');
+                // Here you can add logic for what happens after the quiz is completed
+            }
+        }
+
+        function handleAnswer(button, isTrue) {
+            button.style.backgroundColor = 'yellow';
+            setTimeout(() => {
+                button.style.backgroundColor = '#FFF';
+            }, 1000);
+
+            if ((isTrue && questions[currentQuestionIndex].answer) || (!isTrue && !questions[currentQuestionIndex].answer)) {
+                correctAnswers++;
+                cube.setAttribute('color', `#${(255 - correctAnswers * 50).toString(16)}0000`);
+                cube.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: false; dur: 2000');
+                setTimeout(() => {
+                    cube.removeAttribute('animation');
+                }, 2000);
+                alert('Correct!');
+                nextQuestion();
+            } else {
+                alert('Incorrect!');
+                nextQuestion();
+            }
+        }
+
+        document.getElementById('trueButton').addEventListener('click', function() {
+            handleAnswer(this, true);
+        });
+
+        document.getElementById('falseButton').addEventListener('click', function() {
+            handleAnswer(this, false);
+        });
+    </script>
+</body>
+
 </html>
