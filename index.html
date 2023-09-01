@@ -21,13 +21,12 @@
         #question {
             font-size: 24px;
             margin-bottom: 20px;
-            display: block; /* Changed from inline-block to block */
-            max-width: 80%; /* Adjusted max-width value */
-            margin: 0 auto; /* Center-align the question */
+            display: block;
+            max-width: 80%;
+            margin: 0 auto;
             text-align: center;
         }
 
-        /* Added style to the body for better mobile view */
         body {
             margin: 0;
             overflow: hidden;
@@ -41,10 +40,10 @@
 
 <body onload="adjustQuestionWidth()">
     <a-scene embedded arjs="sourceType: webcam;">
-        <!-- Camera with marker tracking -->
         <a-marker-camera preset="hiro">
-            <!-- Floating Cube -->
-            <a-box id="floatingCube" position="0 0 0" color="#FF0000" depth="0.5" height="0.5" width="0.5"></a-box>
+            <!-- Replaced the cube with the GLB model -->
+            <a-gltf-model src="https://cdn.glitch.global/11043090-493d-4521-944c-28f67d487bc4/fludude.glb?v=1693588295958"
+                position="0 0 0" rotation="0 180 0" scale="0.2 0.2 0.2"></a-gltf-model>
         </a-marker-camera>
 
         <a-entity camera></a-entity>
@@ -60,7 +59,7 @@
     <script>
         function adjustQuestionWidth() {
             const questionElement = document.getElementById('question');
-            questionElement.style.maxWidth = window.innerWidth * 0.8 + 'px'; // Adjusted width calculation
+            questionElement.style.maxWidth = window.innerWidth * 0.8 + 'px';
         }
 
         window.addEventListener('resize', adjustQuestionWidth);
@@ -89,7 +88,7 @@
         ];
         let currentQuestionIndex = 0;
         let correctAnswers = 0;
-        const cube = document.getElementById('floatingCube');
+        const model = document.querySelector('a-gltf-model');
 
         function nextQuestion() {
             currentQuestionIndex++;
@@ -97,10 +96,9 @@
                 document.getElementById('question').innerText = questions[currentQuestionIndex].text;
             } else {
                 if (correctAnswers === questions.length) {
-                    cube.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 5000');
+                    model.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 5000');
                 }
                 alert('Quiz completed!');
-                // Here you can add logic for what happens after the quiz is completed
             }
         }
 
@@ -112,10 +110,10 @@
 
             if ((isTrue && questions[currentQuestionIndex].answer) || (!isTrue && !questions[currentQuestionIndex].answer)) {
                 correctAnswers++;
-                cube.setAttribute('color', `#${(255 - correctAnswers * 50).toString(16)}0000`);
-                cube.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: false; dur: 2000');
+                model.setAttribute('color', `#${(255 - correctAnswers * 50).toString(16)}0000`);
+                model.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: false; dur: 2000');
                 setTimeout(() => {
-                    cube.removeAttribute('animation');
+                    model.removeAttribute('animation');
                 }, 2000);
                 alert('Correct!');
                 nextQuestion();
