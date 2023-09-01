@@ -87,7 +87,6 @@
             }
         ];
         let currentQuestionIndex = 0;
-        let correctAnswers = 0;
         const model = document.querySelector('a-gltf-model');
 
         function nextQuestion() {
@@ -95,9 +94,6 @@
             if (currentQuestionIndex < questions.length) {
                 document.getElementById('question').innerText = questions[currentQuestionIndex].text;
             } else {
-                if (correctAnswers === questions.length) {
-                    model.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur: 5000');
-                }
                 alert('Quiz completed!');
             }
         }
@@ -109,22 +105,23 @@
             }, 1000);
 
             if ((isTrue && questions[currentQuestionIndex].answer) || (!isTrue && !questions[currentQuestionIndex].answer)) {
-                correctAnswers++;
-                model.setAttribute('animation', 'property: position; dir: alternate; dur: 100; loop: 5; to: 0 0.2 0');
+                // Correct Answer Animation: Shake
+                model.setAttribute('animation', 'property: rotation; dir: alternate; dur: 100; loop: 5; to: 0 5 0');
                 setTimeout(() => {
                     model.removeAttribute('animation');
-                    model.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 1000');
-                }, 2000);
-                model.setAttribute('color', `#${(255 - correctAnswers * 50).toString(16)}0000`);
+                    model.setAttribute('rotation', '270 270 90'); // Reset rotation to original values
+                }, 500);
                 alert('Correct!');
-                nextQuestion();
-                if (correctAnswers > 0 && correctAnswers % 1 === 0) {
-                    model.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 1000');
-                }
             } else {
+                // Incorrect Answer Animation: Wiggle
+                model.setAttribute('animation', 'property: position; dir: alternate; dur: 200; loop: 5; to: 0 0.1 0');
+                setTimeout(() => {
+                    model.removeAttribute('animation');
+                    model.setAttribute('position', '0 0 0'); // Reset position to original values
+                }, 1000);
                 alert('Incorrect!');
-                nextQuestion();
             }
+            nextQuestion();
         }
 
         document.getElementById('trueButton').addEventListener('click', function() {
