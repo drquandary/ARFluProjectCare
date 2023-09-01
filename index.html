@@ -111,7 +111,7 @@
             if ((isTrue && questions[currentQuestionIndex].answer) || (!isTrue && !questions[currentQuestionIndex].answer)) {
                 correctAnswers++;
                 model.setAttribute('color', `#${(255 - correctAnswers * 50).toString(16)}0000`);
-                model.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: false; dur: 2000');
+                model.setAttribute('animation', 'property: position; dir: alternate; dur: 100; loop: 5; to: 0 0.2 0');
                 setTimeout(() => {
                     model.removeAttribute('animation');
                 }, 2000);
