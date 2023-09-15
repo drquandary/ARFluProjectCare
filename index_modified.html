@@ -12,7 +12,6 @@
             background-color: #FFF;
             border: 1px solid #000;
             cursor: pointer;
-            border-radius: 20px;
         }
 
         .button:hover {
@@ -26,69 +25,29 @@
             max-width: 80%;
             margin: 0 auto;
             text-align: center;
-            color: white;
         }
 
         body {
             margin: 0;
             overflow: hidden;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-        }
-
-        #lifeBar {
-            display: flex;
-            justify-content: center;
-            width: 80%;
-            background-color: #ddd;
-            border: 1px solid black;
-            height: 20px;
-            overflow: hidden;
-            border-radius: 10px;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .lifeSegment {
-            height: 100%;
-            width: 100%;
-            background-color: green;
-            border-radius: 10px;
-        }
-
-        #message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 20px;
-            display: none;
         }
     </style>
 </head>
 
 <body onload="adjustQuestionWidth()">
-    <a-scene id="scene" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <a-marker preset="hiro" id="marker">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        <a-marker preset="hiro">
+            <!-- Replaced the cube with the GLB model -->
             <a-gltf-model src="https://cdn.glitch.com/11043090-493d-4521-944c-28f67d487bc4%2Ffludude.glb?v=1693588295958"
                 position="0 0 0" rotation="270 270 90" scale="0.9 0.9 0.9"></a-gltf-model>
         </a-marker>
+
         <a-entity camera></a-entity>
     </a-scene>
-
-    <div id="lifeBar">
-        <div class="lifeSegment"></div>
-    </div>
-
-    <div id="message"></div>
 
     <div style="position: absolute; bottom: 10%; width: 100%; text-align: center;">
         <div id="question">The Eiffel Tower is located in London.</div>
@@ -98,25 +57,6 @@
     </div>
 
     <script>
-        function showMessage(message) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = message;
-            messageDiv.style.display = 'block';
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 2000);
-        }
-
-        let enemyLife = 100;
-        let lifeSegments = document.querySelector('.lifeSegment');
-
-        function updateLifeBar() {
-            lifeSegments.style.width = enemyLife + '%';
-            if (enemyLife <= 0) {
-                alert('Enemy defeated!');
-            }
-        }
-
         function adjustQuestionWidth() {
             const questionElement = document.getElementById('question');
             questionElement.style.maxWidth = window.innerWidth * 0.8 + 'px';
@@ -165,23 +105,22 @@
             }, 1000);
 
             if ((isTrue && questions[currentQuestionIndex].answer) || (!isTrue && !questions[currentQuestionIndex].answer)) {
-                showMessage('Correct!');
+                // Correct Answer Animation: Shake
                 model.setAttribute('animation', 'property: rotation; dir: alternate; dur: 100; loop: 5; to: 0 5 0');
                 setTimeout(() => {
                     model.removeAttribute('animation');
-                    model.setAttribute('rotation', '270 270 90');
+                    model.setAttribute('rotation', '270 270 90'); // Reset rotation to original values
                 }, 500);
-                enemyLife -= 20;
-                updateLifeBar();
+                alert('Correct!');
             } else {
-                showMessage('Incorrect!');
+                // Incorrect Answer Animation: Wiggle
                 model.setAttribute('animation', 'property: position; dir: alternate; dur: 200; loop: 5; to: 0 0.1 0');
                 setTimeout(() => {
                     model.removeAttribute('animation');
-                    model.setAttribute('position', '0 0 0');
+                    model.setAttribute('position', '0 0 0'); // Reset position to original values
                 }, 1000);
+                alert('Incorrect!');
             }
-
             nextQuestion();
         }
 

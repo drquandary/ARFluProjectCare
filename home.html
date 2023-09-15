@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+  <style>
+    #homeScreen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .button {
+      margin: 10px;
+      padding: 15px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 20px;
+    }
+    .title {
+      font-size: 48px;
+      color: #fff;
+      text-shadow: 0 0 5px #00f, 0 0 10px #00f, 0 0 15px #f00, 0 0 20px #f00, 0 0 25px #f00, 0 0 30px #f00, 0 0 35px #f00;
+    }
+  </style>
+</head>
+<body style="margin: 0; overflow: hidden;">
+  <a-scene embedded arjs style="position: absolute; display: none;">
+    <!-- AR elements here -->
+  </a-scene>
+
+  <!-- Home Screen -->
+  <div id="homeScreen">
+    <div class="title">Fight the Flu</div>
+    <button class="button" onclick="navigateToReplay()">Replay Video</button>
+    <button class="button" onclick="navigateToFacts()">Vaxy Fax</button>
+    <button class="button" onclick="playGame()">Fight the Flu</button>
+  </div>
+
+  <script>
+    function navigateToReplay() {
+      // Navigate to the Replay Video URL
+      window.location.href = 'https://ko2qy.zappar.io/5613994839004779677/v5/';
+    }
+
+    function navigateToFacts() {
+      // Navigate to Vaxy Fax webpage
+      window.location.href = 'https://www.vaccines.gov';
+    }
+
+    function playGame() {
+      // Navigate to the Fight the Flu game
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

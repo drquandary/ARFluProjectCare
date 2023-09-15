@@ -193,3 +193,27 @@ h2 {
 .fileopener:hover {
   border-bottom:3px solid var(--color-secondary);
 }
+
+
+#lifeBar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 20px;
+  background-color: #ddd;
+  margin-bottom: 20px;
+}
+
+.lifeSegment {
+  flex: 1;
+  background-color: #f00;
+  margin-right: 2px;
+}
+
+.lifeSegment:last-child {
+  margin-right: 0;
+}
+
+.lifeSegment.empty {
+  background-color: #ddd;
+}
