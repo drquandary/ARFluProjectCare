@@ -75,21 +75,30 @@
             border-radius: 20px;
             display: none;
         }
+
+        #animatedImage {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            display: none;
+            transition: bottom 1s ease-in-out, left 1s ease-in-out;
+        }
     </style>
 </head>
 
 <body onload="adjustQuestionWidth()">
     <a-scene mindar-image="imageTargetSrc: https://cdn.glitch.global/1ff0bc65-1f95-4ab6-8115-122057dbbf5f/targets.mind?v=1694880590521;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
         <a-entity mindar-image-target="targetIndex: 0">
-
-                <a-gltf-model src="https://cdn.glitch.com/11043090-493d-4521-944c-28f67d487bc4%2Ffludude.glb?v=1693588295958"
-                position="0 0 0" rotation="0 0 0" scale="0.9 0.9 0.9"></a-gltf-model>
-            
+            <a-gltf-model src="https://cdn.glitch.com/11043090-493d-4521-944c-28f67d487bc4%2Ffludude.glb?v=1693588295958" position="0 0 0" rotation="0 0 0" scale="0.9 0.9 0.9"></a-gltf-model>
+        </a-entity>
         <a-entity camera></a-entity>
     </a-scene>
+
+    <img id="animatedImage" src="https://cdn.glitch.global/11043090-493d-4521-944c-28f67d487bc4/syringe-1862-13133-550x550.png?v=1694883482713" />
 
     <div id="lifeBar">
         <div class="lifeSegment"></div>
@@ -112,6 +121,23 @@
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 2000);
+        }
+
+        function animateImage() {
+            const animatedImage = document.getElementById('animatedImage');
+            animatedImage.style.bottom = '0%';
+            animatedImage.style.left = '50%';
+            animatedImage.style.display = 'block';
+
+            requestAnimationFrame(() => {
+                animatedImage.style.bottom = '50%';
+                animatedImage.style.left = '50%';
+            });
+
+            setTimeout(() => {
+                animatedImage.style.display = 'none';
+                animatedImage.style.bottom = '0%';
+            }, 1000);
         }
 
         let enemyLife = 100;
@@ -173,22 +199,11 @@
 
             if ((isTrue && questions[currentQuestionIndex].answer) || (!isTrue && !questions[currentQuestionIndex].answer)) {
                 showMessage('Correct!');
-                model.setAttribute('animation', 'property: rotation; dir: alternate; dur: 300; loop: 10; to: 0 5 0');
-                setTimeout(() => {
-                    model.removeAttribute('animation');
-                    model.setAttribute('rotation', '360 360 360');
-                }, 500);
+                animateImage();
                 enemyLife -= 20;
                 updateLifeBar();
-            
-            
             } else {
                 showMessage('Incorrect!');
-                model.setAttribute('animation', 'property: position; dir: alternate; dur: 200; loop: 5; to: 0 1 0');
-                setTimeout(() => {
-                    model.removeAttribute('animation');
-                    model.setAttribute('position', '0 0 0');
-                }, 1000);
             }
 
             nextQuestion();
