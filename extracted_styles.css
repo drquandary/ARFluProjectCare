@@ -1,0 +1,80 @@
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #FFF;
+            border: 1px solid #000;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        .button:hover {
+            background-color: yellow;
+        }
+
+        #question {
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: block;
+            max-width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            color: white;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #lifeBar {
+            display: flex;
+            justify-content: center;
+            width: 80%;
+            background-color: #ddd;
+            border: 1px solid black;
+            height: 20px;
+            overflow: hidden;
+            border-radius: 10px;
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .lifeSegment {
+            height: 100%;
+            width: 100%;
+            background-color: green;
+            border-radius: 10px;
+        }
+
+        #message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 20px;
+            display: none;
+        }
+
+        #animatedImage {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            display: none;
+            transition: bottom 1s ease-in-out, left 1s ease-in-out;
+        }
+    

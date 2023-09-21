@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js">
+  </script>
+  <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.0.5/aframe/build/aframe-ar.js">
+  </script>
+  <script src="https://ar-js-org.github.io/AR.js/aframe/build/aframe-ar-nft.js">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js">
+  </script>
+  <link href="extracted_styles.css" rel="stylesheet" type="text/css"/>
+ </head>
+ <body onload="adjustQuestionWidth()">
+  <a-scene device-orientation-permission-ui="enabled: false" mindar-image="imageTargetSrc: https://cdn.glitch.global/1ff0bc65-1f95-4ab6-8115-122057dbbf5f/targets.mind?v=1694880590521;" vr-mode-ui="enabled: false">
+   <a-camera look-controls="enabled: false" position="0 0 0">
+   </a-camera>
+   <a-entity mindar-image-target="targetIndex: 0">
+    <a-gltf-model <a-animation="" attribute="rotation" begin="hit-animation" dur="1000" fill="forwards" position="0 0 0" rotation="0 0 0" scale="0.9 0.9 0.9" src="https://cdn.glitch.com/11043090-493d-4521-944c-28f67d487bc4%2Ffludude.glb?v=1693588295958" to="0 360 0">
+    </a-gltf-model>
+   </a-entity>
+  </a-scene>
+ </body>
+</html>
+&gt;
+<a-entity camera="">
+</a-entity>
+<img id="animatedImage" src="https://cdn.glitch.global/11043090-493d-4521-944c-28f67d487bc4/syringe-1862-13133-550x550.png?v=1694883482713"/>
+<div id="lifeBar">
+ <div class="lifeSegment">
+ </div>
+</div>
+<div id="message">
+</div>
+<div style="position: absolute; bottom: 10%; width: 100%; text-align: center;">
+ <div id="question">
+  The Eiffel Tower is located in London.
+ </div>
+ <br/>
+ <div class="button" id="trueButton">
+  True
+ </div>
+ <div class="button" id="falseButton">
+  False
+ </div>
+</div>
+<script>
+ function showMessage(message) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 2000);
+        }
+
+        function animateImage() {
+            const animatedImage = document.getElementById('animatedImage');
+            animatedImage.style.bottom = '0%';
+            animatedImage.style.left = '50%';
+            animatedImage.style.display = 'block';
+
+            requestAnimationFrame(() => {
+                animatedImage.style.bottom = '50%';
+                animatedImage.style.left = '50%';
+            });
+
+            setTimeout(() => {
+                animatedImage.style.display = 'none';
+                animatedImage.style.bottom = '0%';
+            }, 1000);
+        }
+
+        let enemyLife = 100;
+        let lifeSegments = document.querySelector('.lifeSegment');
+
+        function updateLifeBar() {
+            lifeSegments.style.width = enemyLife + '%';
+            if (enemyLife <= 0) {
+                alert('Enemy defeated!');
+            }
+        }
+
+        function adjustQuestionWidth() {
+            const questionElement = document.getElementById('question');
+            questionElement.style.maxWidth = window.innerWidth * 0.8 + 'px';
+        }
+
+        window.addEventListener('resize', adjustQuestionWidth);
+
+        let questions = [
+            {
+                text: 'The Eiffel Tower is located in London.',
+                answer: false
+            },
+            {
+                text: 'The capital of France is Paris.',
+                answer: true
+            },
+            {
+                text: 'Bananas are blue.',
+                answer: false
+            },
+            {
+                text: 'Cats are mammals.',
+                answer: true
+            },
+            {
+                text: 'The sun is a planet.',
+                answer: false
+            }
+        ];
+        let currentQuestionIndex = 0;
+        const model = document.querySelector('a-gltf-model');
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                document.getElementById('question').innerText = questions[currentQuestionIndex].text;
+            } else {
+                alert('Quiz completed!');
+            }
+        }
+
+        function handleAnswer(button, isTrue) {
+            button.style.backgroundColor = 'yellow';
+            setTimeout(() => {
+                button.style.backgroundColor = '#FFF';
+            }, 1000);
+
+            if ((isTrue && questions[currentQuestionIndex].answer) || (!isTrue && !questions[currentQuestionIndex].answer)) {
+                showMessage('Correct!');
+                animateImage();
+                enemyLife -= 20;
+                updateLifeBar();
+            } else {
+                showMessage('Incorrect!');
+            }
+
+            nextQuestion();
+        }
+
+        document.getElementById('trueButton').addEventListener('click', function() {
+            handleAnswer(this, true);
+        });
+
+        document.getElementById('falseButton').addEventListener('click', function() {
+            handleAnswer(this, false);
+        });
+    
+        function checkAnswer() {
+            // Existing code to check answer
+            // ...
+            if (correct) { // Assuming `correct` is a variable that becomes true when the answer is correct
+                var model = document.querySelector('[gltf-model]');
+                model.emit('hit-animation');
+            }
+        }
+</script>

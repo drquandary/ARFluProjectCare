@@ -1,0 +1,25 @@
+--- original.html
++++ modified.html
+@@ -16,12 +16,7 @@
+                      position="0 0 0" 
+                      rotation="0 0 0" 
+                      scale="0.9 0.9 0.9" 
+-                     <a-animation attribute="rotation"
+-                                  dur="1000"
+-                                  fill="forwards"
+-                                  to="0 360 0"
+-                                  begin="hit-animation">
+-                     </a-animation>
++                     animation="property: rotation; to: 0 360 0; dur: 1000; startEvents: hit-animation">
+         </a-gltf-model>
+     </a-entity>
+ 
+@@ -29,7 +24,7 @@
+         // Your JavaScript code
+         function handleAnswer(button, isTrue) {
+             // Existing code
+-            var model = document.querySelector('[gltf-model]');
++            var model = document.querySelector('a-gltf-model');
+             model.emit('hit-animation');
+         }
+     </script>
