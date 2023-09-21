@@ -93,7 +93,13 @@
     <a-scene mindar-image="imageTargetSrc: https://cdn.glitch.global/1ff0bc65-1f95-4ab6-8115-122057dbbf5f/targets.mind?v=1694880590521;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
         <a-entity mindar-image-target="targetIndex: 0">
-            <a-gltf-model src="https://cdn.glitch.com/11043090-493d-4521-944c-28f67d487bc4%2Ffludude.glb?v=1693588295958" position="0 0 0" rotation="0 0 0" scale="0.9 0.9 0.9"></a-gltf-model>
+            <a-gltf-model src="https://cdn.glitch.com/11043090-493d-4521-944c-28f67d487bc4%2Ffludude.glb?v=1693588295958" position="0 0 0" rotation="0 0 0" scale="0.9 0.9 0.9"
+                                 id="animatedModel"
+            animation="property: rotation; to: -360 0 0; dur: 200; startEvents: hit-animation">
+
+    
+            </a-gltf-model>
+
         </a-entity>
         <a-entity camera></a-entity>
     </a-scene>
@@ -159,24 +165,24 @@
 
         let questions = [
             {
-                text: 'The Eiffel Tower is located in London.',
+                text: 'The flu vaccine can give my child the flu.',
                 answer: false
             },
             {
-                text: 'The capital of France is Paris.',
+                text: 'Healthy kids need to get the flu vaccine every year.',
                 answer: true
             },
             {
-                text: 'Bananas are blue.',
+                text: 'The flu is just a bad cold.',
                 answer: false
             },
             {
-                text: 'Cats are mammals.',
+                text: 'The side effects from the flu vaccine are NOT worse than the flu.',
                 answer: true
             },
             {
-                text: 'The sun is a planet.',
-                answer: false
+                text: 'Children can die or become seriously ill from the flu.',
+                answer: true
             }
         ];
         let currentQuestionIndex = 0;
@@ -202,6 +208,15 @@
                 animateImage();
                 enemyLife -= 20;
                 updateLifeBar();
+                //play hit animation
+                var model = document.querySelector('a-gltf-model');
+                // Reset and play the animation
+                var model = document.getElementById('animatedModel');
+                model.removeAttribute('animation');
+                model.setAttribute('rotation', '0 0 0');
+                model.setAttribute('animation', 'property: rotation; to: -360 0 0; dur: 200; startEvents: hit-animation');
+
+                model.emit('hit-animation');
             } else {
                 showMessage('Incorrect!');
             }
@@ -216,7 +231,16 @@
         document.getElementById('falseButton').addEventListener('click', function() {
             handleAnswer(this, false);
         });
-    </script>
+    
+        function checkAnswer() {
+            // Existing code to check answer
+            // ...
+            if (correct) { // Assuming `correct` is a variable that becomes true when the answer is correct
+                var model = document.querySelector('[gltf-model]');
+                model.emit('hit-animation');
+            }
+        }
+        </script>
 </body>
 
 </html>

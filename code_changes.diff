@@ -1,0 +1,49 @@
+--- original_code.html
++++ updated_code.html
+@@ -35,7 +35,7 @@
+       <a-entity
+         id="fact-text"
+         position="0 0 -3"
+-        text="value: Can the flu vaccine give my child the flu? Fact: No, the flu vaccine cannot give your child the flu.; align: center; color: white; width: 4"
++        text="value: ; align: center; color: white; width: 4; wrapCount: 30"
+       ></a-entity>
+     </a-scene>
+ 
+@@ -49,7 +49,7 @@
+       // Fact Bank
+       const factBank = {
+         fluFacts: [
+-    // ... (same as your previous facts)
++          // ... (same as your previous facts)
+         ],
+       };
+ 
+@@ -62,19 +62,25 @@
+ 
+       // Add event listeners for button clicks
+       backButton.addEventListener("click", () => {
+-        currentFactIndex = (currentFactIndex - 1 + factBank.fluFacts.length) % factBank.fluFacts.length;
++        currentFactIndex = Math.max(0, currentFactIndex - 2);
+         updateFact();
+       });
+ 
+       nextButton.addEventListener("click", () => {
+-        currentFactIndex = (currentFactIndex + 1) % factBank.fluFacts.length;
++        currentFactIndex = Math.min(factBank.fluFacts.length - 2, currentFactIndex + 2);
+         updateFact();
+       });
+ 
+       // Function to update the displayed fact
+       function updateFact() {
+-        factText.setAttribute("text", "value", factBank.fluFacts[currentFactIndex]);
++        const fact = factBank.fluFacts[currentFactIndex] + "\n\n" + factBank.fluFacts[currentFactIndex + 1];
++        factText.setAttribute("text", "value", fact);
+       }
++
++      // Initialize the first fact
++      window.addEventListener("load", () => {
++        updateFact();
++      });
+     </script>
+   </body>
+ </html>

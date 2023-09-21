@@ -1,0 +1,36 @@
+--- index.html
++++ index.html
+@@ -93,7 +93,14 @@
+     <a-scene mindar-image="imageTargetSrc: https://cdn.glitch.global/1ff0bc65-1f95-4ab6-8115-122057dbbf5f/targets.mind?v=1694880590521;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+         <a-entity mindar-image-target="targetIndex: 0">
+-            <a-gltf-model src="https://cdn.glitch.com/11043090-493d-4521-944c-28f67d487bc4%2Ffludude.glb?v=1693588295958" position="0 0 0" rotation="0 0 0" scale="0.9 0.9 0.9"></a-gltf-model>
++            <a-gltf-model src="https://cdn.glitch.com/11043090-493d-4521-944c-28f67d487bc4%2Ffludude.glb?v=1693588295958" position="0 0 0" rotation="0 0 0" scale="0.9 0.9 0.9"
++    <a-animation attribute="rotation"
++                 dur="1000"
++                 fill="forwards"
++                 to="0 360 0"
++                 begin="hit-animation">
++    </a-animation>
++    ></a-gltf-model>
+         </a-entity>
+         <a-entity camera></a-entity>
+     </a-scene>
+@@ -216,7 +223,16 @@
+         document.getElementById('falseButton').addEventListener('click', function() {
+             handleAnswer(this, false);
+         });
+-    </script>
++    
++        function checkAnswer() {
++            // Existing code to check answer
++            // ...
++            if (correct) { // Assuming `correct` is a variable that becomes true when the answer is correct
++                var model = document.querySelector('[gltf-model]');
++                model.emit('hit-animation');
++            }
++        }
++        </script>
+ </body>
+ 
+ </html>
