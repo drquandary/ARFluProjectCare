@@ -34,14 +34,19 @@
       <a-entity
         id="fact-text"
         position="0 0 -3"
-        text="value: Can the flu vaccine give my child the flu? Fact: No, the flu vaccine cannot give your child the flu.; align: center; color: white; width: 4"
-      ></a-entity>
+      
+          geometry="primitive: plane; width: 3; height: 1.5"
+          material="color: black; opacity: 0.5"
+          text="value: 1. Can the flu vaccine give my child the flu? ; align: center; color: white; width: 3;"
+        ></a-entity>
+      </a-entity>
     </a-scene>
 
     <!-- 2D Buttons -->
     <div id="button-container">
       <button class="rounded-button" id="back-button">Back</button>
       <button class="rounded-button" id="next-button">Next</button>
+      <button class="rounded-button" id="video-button" onclick="window.open('https://youtu.be/9go34iIfLEM', '_blank')">Facts Video</button>
     </div>
 
     <script>
@@ -114,17 +119,35 @@
       backButton.addEventListener("click", () => {
         currentFactIndex = (currentFactIndex - 1 + factBank.fluFacts.length) % factBank.fluFacts.length;
         updateFact();
+        updatePlaneSize();
       });
 
       nextButton.addEventListener("click", () => {
         currentFactIndex = (currentFactIndex + 1) % factBank.fluFacts.length;
         updateFact();
+        updatePlaneSize();
       });
 
       // Function to update the displayed fact
       function updateFact() {
         factText.setAttribute("text", "value", factBank.fluFacts[currentFactIndex]);
       }
+
+      // Function to update the size of the plane
+      function updatePlaneSize() {
+        // Set the geometry of the plane to a fixed size
+        factText.setAttribute("geometry", {
+          primitive: "plane",
+          width: 3,  // Adjust this value as needed
+          height: 1.5  // Adjust this value as needed
+        });
+      }
+    </script>
+  </body>
+</html>
+
+      // Start observing the factText entity for changes to the text attribute
+      observer.observe(factText, { attributes: true, attributeFilter: ["text"] });
     </script>
   </body>
 </html>
